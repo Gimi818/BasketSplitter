@@ -2,15 +2,18 @@ package basketsplitter;
 
 import java.util.*;
 
-public class BasketSplitter {
+class BasketSplitter {
 
     private final Map<String, List<String>> deliveryOptions;
 
-    public BasketSplitter(String absolutePathToConfigFile) {
+    BasketSplitter(String absolutePathToConfigFile) {
         this.deliveryOptions = ConfigLoader.loadConfig(absolutePathToConfigFile);
     }
 
     public Map<String, List<String>> split(List<String> items) {
+        if (items == null) {
+            throw new IllegalArgumentException("Item list cannot be null");
+        }
         Map<String, List<String>> deliveryGroups = new HashMap<>();
         Set<String> remainingItems = new HashSet<>(items);
 
@@ -27,7 +30,7 @@ public class BasketSplitter {
         return deliveryGroups;
     }
 
-    private List<String> filterAndUpdateDeliveryCounts(Set<String> remainingItems, String method, Map<String, Integer> deliveryMethodCount) {
+    List<String> filterAndUpdateDeliveryCounts(Set<String> remainingItems, String method, Map<String, Integer> deliveryMethodCount) {
         List<String> maxGroup = new ArrayList<>();
         Iterator<String> iterator = remainingItems.iterator();
 
@@ -50,14 +53,14 @@ public class BasketSplitter {
         return maxGroup;
     }
 
-    private Map<String, Integer> countDeliveryMethods(Set<String> items) {
+    Map<String, Integer> countDeliveryMethods(Set<String> items) {
         Map<String, Integer> deliveryMethodCount = new HashMap<>();
         items.forEach(item -> deliveryOptions.getOrDefault(item, Collections.emptyList())
                 .forEach(method -> deliveryMethodCount.merge(method, 1, Integer::sum)));
         return deliveryMethodCount;
     }
 
-    private String findMaxDeliveryMethod(Map<String, Integer> deliveryMethodCount) {
+    String findMaxDeliveryMethod(Map<String, Integer> deliveryMethodCount) {
         return Collections.max(deliveryMethodCount.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 }
