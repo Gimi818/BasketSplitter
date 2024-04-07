@@ -1,0 +1,6 @@
+{
+  "Product1": ["Courier", "Pick-up point"],
+  "Product2": ["Courier"],
+  "Product3": ["Pick-up point"],
+  "Product4": ["Courier", "Pick-up point", "Parcel locker"]
+}
