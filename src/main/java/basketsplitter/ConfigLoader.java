@@ -20,7 +20,7 @@ public class ConfigLoader {
             return objectMapper.readValue(jsonData, new TypeReference<Map<String, List<String>>>(){});
         } catch (IOException e) {
                 log.error("Error loading configuration from file: {}", filePath, e);
-            return null;
+            throw new RuntimeException("Failed to load configuration from file: " + filePath, e);
         }
     }
 }
